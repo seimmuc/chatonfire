@@ -33,5 +33,13 @@
       "enabled": true
     },
     "singleProjectMode": true
+  },
+  "hosting": {
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "app"
+      }
+    ]
   }
 }
