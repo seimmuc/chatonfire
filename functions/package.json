@@ -13,7 +13,7 @@
   "engines": {
     "node": "22"
   },
-  "main": "lib/index.js",
+  "main": "lib/init.js",
   "dependencies": {
     "@types/cookie-parser": "^1.4.9",
     "@types/ejs": "^3.1.5",
