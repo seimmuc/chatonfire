@@ -1,5 +1,5 @@
 import { Router } from 'express';
-var router = Router();
+const router = Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

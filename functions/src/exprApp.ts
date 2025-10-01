@@ -4,10 +4,10 @@ import { join } from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', join(__dirname, 'views'));
