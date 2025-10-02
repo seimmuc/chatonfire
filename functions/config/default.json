@@ -1,6 +1,10 @@
 {
   "express": {
     "staticfiles": false,
-    "trustproxy": false
+    "trustproxy": false,
+    "cookiesession": {
+      "secret": "tavykcainjarek",
+      "maxage": 34560000000
+    }
   }
 }

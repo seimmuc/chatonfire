@@ -3,8 +3,10 @@ import createError from 'http-errors';
 import express, { json, urlencoded, static as exprStatic, ErrorRequestHandler } from 'express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
+import cookieSession from 'cookie-session';
 import logger from 'morgan';
 
+import sessionid from './middleware/sessionid.js';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 
@@ -24,6 +26,12 @@ app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  secret: config.cookiesession.secret,
+  maxAge: config.cookiesession.maxage
+}));
+app.use(sessionid());
 if (config.staticfiles) {
   app.use(exprStatic(join(__dirname, 'public')));
 }
