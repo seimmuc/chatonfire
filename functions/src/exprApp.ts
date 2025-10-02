@@ -1,3 +1,4 @@
+import fullConfig from 'config';
 import createError from 'http-errors';
 import express, { json, urlencoded, static as exprStatic, ErrorRequestHandler } from 'express';
 import { join } from 'path';
@@ -7,17 +8,25 @@ import logger from 'morgan';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 
+const config = fullConfig.get('express');
+
 const app = express();
 
 // view engine setup
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// set reverse proxy setting
+// More info: https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', config.trustproxy);
+
 app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(exprStatic(join(__dirname, 'public')));
+if (config.staticfiles) {
+  app.use(exprStatic(join(__dirname, 'public')));
+}
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
