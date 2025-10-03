@@ -35,10 +35,11 @@
     "singleProjectMode": true
   },
   "hosting": {
+    "public": "functions/lib/public",
     "rewrites": [
       {
         "source": "**",
-        "function": "app"
+        "function": "web"
       }
     ]
   }
