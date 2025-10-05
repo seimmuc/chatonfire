@@ -1,8 +1,51 @@
-body {
-  padding: 50px;
+:root {
+  height: 100%;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: #eeeeee;
+  background-color: hsl(255, 10%, 2%);
 }
 
-a {
-  color: #00B7FF;
+body {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+button {
+  color: #eeeeee;
+}
+
+nav#topbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+
+
+  background-color: hsl(255, 10%, 15%);
+  padding: 10px 30px;
+  font-size: 1.3em;
+
+  a.nav-button {
+    font-size: inherit;
+    cursor: pointer;
+    color: hsl(75, 40%, 95%);
+    text-decoration: none;
+    background-color: hsl(75, 20%, 22%);
+    border: 0.2em solid hsl(75, 20%, 30%);
+    border-radius: 0.2em;
+    padding: 0.15em 0.3em;
+    transition: background-color 0.5s, border-color 0.5s;
+    &:hover {
+      background-color: hsl(75, 30%, 32%);
+      border-color: hsl(75, 30%, 40%);
+    }
+  }
+}
+
+main {
+  flex-grow: 1;
+  padding: calc(1.5em + 20px) calc(2em + 30px);
 }

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('shared/head_base', {title}); %>
+    <% if (headExtension !== undefined) { %>
+     <%- include(headExtension) %>
+    <% } %>
+  </head>
+  <body>
+    <%- include('shared/header'); %>
+    <main>
+      <%- include(contentPath, contentData) %>
+    </main>
+  </body>
+</html>

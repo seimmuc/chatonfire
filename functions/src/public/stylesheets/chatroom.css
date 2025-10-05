@@ -1,0 +1,67 @@
+.content-box {
+  margin: 0;
+  border: calc(0.1em + 2px) solid hsl(255, 30%, 15%);
+  border-radius: 0.5em;
+  button {
+    background-color: hsl(75, 20%, 20%);
+    color: hsl(75, 50%, 90%);
+    border: none;
+    border-radius: 0.2em;
+    padding: 0.4em 0.8em;
+  }
+}
+
+.newchat {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1em 1.75em;
+  label {
+    width: fit-content;
+    min-width: 25em;
+    display: flex;
+    flex-direction: column;
+    margin: 1em 0;
+  }
+  button {
+    margin: 0.5em 0 1em;
+  }
+}
+
+.chatbox {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  .cb-head {
+    background-color: hsl(255, 20%, 12%);
+    border-bottom: calc(0.1em + 2px) solid hsl(255, 30%, 15%);
+    .chat-header {
+      text-align: center;
+      font-weight: bold;
+      margin: 0.3em 40px;
+      &.error {
+        color: lightcoral;
+      }
+    }
+  }
+  .cb-main {
+    flex-grow: 1;
+    background-color: hsl(255, 20%, 6%);
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    &.error {
+      justify-content: center;
+      .error-message {
+        text-align: center;
+        color: lightcoral;
+        font-size: 2em;
+        line-height: 1.7;
+      }
+    }
+  }
+}

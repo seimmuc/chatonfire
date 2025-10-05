@@ -11,7 +11,7 @@ import {setGlobalOptions} from "firebase-functions";
 import {onRequest} from "firebase-functions/https";
 import { getFirestore } from "firebase-admin/firestore";
 // import * as logger from "firebase-functions/logger";
-import eApp from './exprApp.js';
+import { app as eApp, staticApp as eAssets } from './exprApp.js';
 import { initializeApp } from "firebase-admin/app";
 import { AppState } from "./common.js";
 
@@ -25,3 +25,4 @@ const db = getFirestore(app);
 state.db = db;
 
 export const web = onRequest(eApp);
+export const assets = eAssets === undefined ? undefined : onRequest(eAssets);

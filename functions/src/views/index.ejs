@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <%- include('shared/head_base', {title}); %>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <p>Databse is <%= dbPresent ? "" : "not " %>present</p>
-    <p>Your session id is <b><%= sessionId %></b></p>
+    <%- include('shared/header'); %>
+    <main>
+      <h1><%= title %></h1>
+      <p>Welcome to <%= title %></p>
+      <p>Databse is <%= dbPresent ? "" : "not " %>present</p>
+      <p>Your session id is <b><%= sessionId %></b></p>
+    </main>
   </body>
 </html>

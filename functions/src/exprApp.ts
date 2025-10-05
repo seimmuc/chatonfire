@@ -1,6 +1,6 @@
 import fullConfig from 'config';
 import createError from 'http-errors';
-import express, { json, urlencoded, static as exprStatic, ErrorRequestHandler } from 'express';
+import express, { json, urlencoded, static as exprStatic, ErrorRequestHandler, Express } from 'express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
@@ -32,9 +32,6 @@ app.use(cookieSession({
   maxAge: config.cookiesession.maxage
 }));
 app.use(sessionid());
-if (config.staticfiles) {
-  app.use(exprStatic(join(__dirname, 'public')));
-}
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -48,11 +45,17 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 } satisfies ErrorRequestHandler);
 
-export default app;
+let staticApp: Express | undefined = undefined;
+if (config.staticfiles) {
+  staticApp = express();
+  staticApp.use(exprStatic(join(__dirname, 'public')));
+}
+
+export {app, staticApp};

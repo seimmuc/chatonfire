@@ -15,6 +15,7 @@
   },
   "main": "lib/init.js",
   "dependencies": {
+    "@skorotkiewicz/snowflake-id": "^1.0.1",
     "@types/config": "^3.3.5",
     "@types/cookie-parser": "^1.4.9",
     "@types/cookie-session": "^2.0.49",
