@@ -6,7 +6,7 @@ import { exec } from 'node:child_process';
 import { join, resolve } from 'node:path';
 import process from 'node:process';
 import { promisify } from 'node:util';
-import { BUILD_COPY_GLOBS, BUILD_IN_DIR, BUILD_OUT_DIR, copyGlobbedFilesIfDifferent, getFunctionsDirOrExit } from './common.mjs';
+import { BUILD_COPY_GLOBS, BUILD_IN_DIR, BUILD_OUT_DIR, copyGlobbedFilesIfDifferent, getFunctionsDirOrExit } from './common.mts';
 
 
 
@@ -26,7 +26,7 @@ await new Promise(res => {
       throw error;
     }
     process.exit(2);
-  }).finally(res);
+  }).finally(res as () => void);
 });
 
 

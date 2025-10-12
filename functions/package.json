@@ -2,7 +2,7 @@
   "name": "functions",
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
-    "build": "node bin/build.mjs",
+    "build": "ts-node bin/build.mts",
     "build:watch": "npm run build && tsc --watch",
     "serve": "npm run build && cross-env NODE_ENV=dev firebase emulators:start",
     "shell": "npm run build && firebase functions:shell",
@@ -42,6 +42,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.25.4",
     "firebase-functions-test": "^3.1.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
   "private": true

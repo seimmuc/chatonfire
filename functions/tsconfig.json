@@ -13,5 +13,6 @@
     "noUnusedLocals": false,
     "noImplicitReturns": true,
   },
-  "compileOnSave": true
+  "compileOnSave": true,
+  "exclude": ["./bin/**"]
 }

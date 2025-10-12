@@ -1,3 +1,5 @@
+import type { PathLike } from 'node:fs';
+import type { FileHandle } from 'node:fs/promises';
 import { copyFile, readFile, stat, utimes, constants as fsconstants, mkdir, glob } from 'node:fs/promises';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 
@@ -9,36 +11,36 @@ export const BUILD_COPY_GLOBS = ['views/**/*.ejs', 'public/**/*'];
 
 /**
  * Reads and parses a json file
- * @param {string | import('node:fs/promises').FileHandle} path json file path
+ * @param {PathLike | import('node:fs/promises').FileHandle} path json file path
  * @returns {Promise<object | array | string | number | boolean | null>} contents of the json file
  */
-export async function readJson(path) {
+export async function readJson(path: PathLike | FileHandle): Promise<object | Array<any> | string | number | boolean | null> {
   return JSON.parse(await readFile(path, {encoding: 'utf8', flag: 'r'}));
 }
 
 /**
  * * Verifies that the given path points to the project's /funcitons/ directory by finding appropriate package.json files
  * @param {string} funcDir path to the <projectDir>/functions/ directory
- * @returns {Promise<[correct: boolean, error: string?]>} [correct, error] tuple with a confirmation that directory is correct and an error message if it isn't
+ * @returns {Promise<[correct: boolean, error?: string]>} [correct, error] tuple with a confirmation that directory is correct and an error message if it isn't
  */
-export async function verifyFunctionsDir(funcDir) {
+export async function verifyFunctionsDir(funcDir: string): Promise<[correct: boolean, error?: string]> {
   if (basename(resolve(funcDir)) !== 'functions') {
     return [false, `invalid duncDir path, must point to 'functions' directory`];
   }
   try {
     const [funcPackage, rootPackage] = await Promise.all([readJson(join(funcDir, './package.json')), readJson(join(funcDir, '../package.json'))]);
-    if (typeof funcPackage !== 'object' || funcPackage.name !== 'functions') {
+    if (typeof funcPackage !== 'object' || funcPackage === null || !('name' in funcPackage) || funcPackage.name !== 'functions') {
       return [false, 'failed to locate functions package'];
     }
-    if (typeof rootPackage !== 'object' || rootPackage.name !== ROOT_PACKAGE_NAME) {
+    if (typeof rootPackage !== 'object' || rootPackage === null || !('name' in rootPackage) || rootPackage.name !== ROOT_PACKAGE_NAME) {
       return [false, `failed to locate root (${ROOT_PACKAGE_NAME}) package`];
     }
     return [true, undefined];
   } catch (err) {
-    if (typeof err === 'object' && Object.hasOwn(err, 'message')) {
+    if (typeof err === 'object' && err !== null && 'message' in err) {
       err = err.message;
     }
-    return [false, err.toString()];
+    return [false, String(err)];
   }
 }
 
@@ -59,10 +61,10 @@ export async function getFunctionsDirOrExit() {
 
 /**
  * Creates a new directory if it did not already exist
- * @param {string | import('node:fs/promises').FileHandle} dirPath directory path
+ * @param {PathLike} dirPath directory path
  * @returns whether or not a new directory was created
  */
-export async function mkdirIfMissing(dirPath) {
+export async function mkdirIfMissing(dirPath: PathLike) {
   try {
     const stats = await stat(dirPath);
     if (stats.isDirectory()) {
@@ -71,7 +73,7 @@ export async function mkdirIfMissing(dirPath) {
       throw new Error(`${dirPath} already exists, but is not a directory`);
     }
   } catch (err) {
-    if (typeof err === 'object' && err.code === 'ENOENT') {
+    if (typeof err === 'object' && err !== null && 'code' in err && err.code === 'ENOENT') {
       await mkdir(dirPath, {recursive: true});
       return true;
     }
@@ -81,11 +83,11 @@ export async function mkdirIfMissing(dirPath) {
 
 /**
  * Copies a file to a given destination path, preserving its modification time. Does nothing if there already is a file at the destination with same size and modification time.
- * @param {string | import('node:fs/promises').FileHandle} sourcePath path to the source file
- * @param {string | import('node:fs/promises').FileHandle} destPath path to the destination file, that may not exist yet
+ * @param {PathLike} sourcePath path to the source file
+ * @param {string} destPath path to the destination file, that may not exist yet
  * @returns {Promise<boolean>} whether or not the file was copied
  */
-export async function copyFileIfDIfferent(sourcePath, destPath) {
+export async function copyFileIfDIfferent(sourcePath: PathLike, destPath: string): Promise<boolean> {
   const stats = await Promise.allSettled([stat(sourcePath), stat(destPath)]);
   const [sourceStats, destStats] = stats.map(p => {
     if (p.status === 'fulfilled') {
@@ -115,9 +117,8 @@ export async function copyFileIfDIfferent(sourcePath, destPath) {
  * @param {string} outDirAbs target directory
  * @param {string[]} copyGlobs list of relative glob patterns to match files in the source directory to be copied over
  */
-export async function copyGlobbedFilesIfDifferent(inDirAbs, outDirAbs, copyGlobs) {
-  /** @type {Promise<boolean>[]} */
-  const copyJobs = [];
+export async function copyGlobbedFilesIfDifferent(inDirAbs: string, outDirAbs: string, copyGlobs: string[]) {
+  const copyJobs: Promise<boolean>[] = [];
   for (const copyGlob of copyGlobs) {
     for await (const de of glob(copyGlob, {cwd: inDirAbs, withFileTypes: true})) {
       // We currently ignore directories and symlinks
