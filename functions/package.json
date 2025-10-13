@@ -3,8 +3,8 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "build": "ts-node bin/build.mts",
-    "build:watch": "npm run build && tsc --watch",
-    "serve": "npm run build && cross-env NODE_ENV=dev firebase emulators:start",
+    "build:watch": "ts-node bin/servewatch.mts --no-firebase",
+    "serve": "ts-node bin/servewatch.mts --env dev",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",

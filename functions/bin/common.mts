@@ -131,3 +131,28 @@ export async function copyGlobbedFilesIfDifferent(inDirAbs: string, outDirAbs: s
   }
   await Promise.all(copyJobs);
 }
+
+export type SimpleLogger = Pick<Console, 'log' | 'debug' | 'info' | 'warn' | 'error'>
+export class PrefixLogger implements SimpleLogger{
+  prefix;
+  parent;
+  constructor(prefix: string, parent: SimpleLogger) {
+    this.prefix = prefix;
+    this.parent = parent;
+  }
+  log(message?: any, ...optionalParams: any[]): void {
+    this.parent.log(this.prefix, message, ...optionalParams);
+  }
+  debug(message?: any, ...optionalParams: any[]): void {
+    this.parent.debug(this.prefix, message, ...optionalParams);
+  }
+  info(message?: any, ...optionalParams: any[]): void {
+    this.parent.info(this.prefix, message, ...optionalParams);
+  }
+  warn(message?: any, ...optionalParams: any[]): void {
+    this.parent.warn(this.prefix, message, ...optionalParams);
+  }
+  error(message?: any, ...optionalParams: any[]): void {
+    this.parent.error(this.prefix, message, ...optionalParams);
+  }
+}
