@@ -1,5 +1,5 @@
 import { ChildProcess, spawn } from "node:child_process";
-import { BUILD_COPY_GLOBS, BUILD_IN_DIR, BUILD_OUT_DIR, copyFileIfDIfferent, copyGlobbedFilesIfDifferent, getFunctionsDirOrExit, PrefixLogger, type SimpleLogger } from "./common.mts";
+import { BUILD_COPY_GLOBS, BUILD_IN_DIR, BUILD_OUT_DIR, copyFileIfDIfferent, copyGlobbedFilesIfDifferent, getFunctionsDirOrExit, matchesBuildGlobs, PrefixLogger, type BuildGlobs, type SimpleLogger } from "./common.mts";
 import { parseArgs } from "node:util";
 import { type FileChangeInfo, stat, unlink, watch } from "node:fs/promises";
 import { join, matchesGlob } from "node:path";
@@ -113,7 +113,7 @@ class FirebaseEmulatorRunner implements BackgroundRunner {
 class StaticFileWatchRunner implements BackgroundRunner {
   inDirAbs: string;
   outDirAbs: string;
-  copyGlobs: string[];
+  copyGlobs: BuildGlobs;
   canDelete: boolean;
   debounceDelay: number;
   runPendingOnAbort: boolean;
@@ -121,7 +121,7 @@ class StaticFileWatchRunner implements BackgroundRunner {
   protected runnerPromise: Promise<void> | undefined;
   protected debounceQueue: Record<string, [FileChangeInfo<string>, NodeJS.Timeout]> = {};
   protected handlerPromises: Set<Promise<void>> = new Set();
-  constructor(inDirAbs: string, outDirAbs: string, copyGlobs: string[], abortSignal: AbortSignal, canDelete=true, debouceDelay=25, runPendingOnAbort=false) {
+  constructor(inDirAbs: string, outDirAbs: string, copyGlobs: BuildGlobs, abortSignal: AbortSignal, canDelete=true, debouceDelay=25, runPendingOnAbort=false) {
     this.inDirAbs = inDirAbs;
     this.outDirAbs = outDirAbs;
     this.copyGlobs = copyGlobs;
@@ -163,7 +163,7 @@ class StaticFileWatchRunner implements BackgroundRunner {
     try {
       for await (const event of watcher) {
         // Check if the glob matches
-        if (event.filename === null || !this.copyGlobs.some(glob => matchesGlob(event.filename as string, glob))) {
+        if (event.filename === null || !matchesBuildGlobs(event.filename, this.copyGlobs)) {
           continue;
         }
         // debounce repeat events on the same file

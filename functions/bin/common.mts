@@ -1,12 +1,16 @@
 import type { PathLike } from 'node:fs';
 import type { FileHandle } from 'node:fs/promises';
 import { copyFile, readFile, stat, utimes, constants as fsconstants, mkdir, glob } from 'node:fs/promises';
-import { basename, dirname, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, matchesGlob, relative, resolve } from 'node:path';
 
+// Options
 const ROOT_PACKAGE_NAME = 'chatonfire';
 export const BUILD_IN_DIR = './src';
 export const BUILD_OUT_DIR = './lib';
-export const BUILD_COPY_GLOBS = ['views/**/*.ejs', 'public/**/*'];
+export const BUILD_COPY_GLOBS: BuildGlobs = {include: ['views/**/*.ejs', 'public/**/*'], exclude: ['**/*.ts']};
+
+
+export type BuildGlobs = {include: string[], exclude: string[]};
 
 
 /**
@@ -117,19 +121,21 @@ export async function copyFileIfDIfferent(sourcePath: PathLike, destPath: string
  * @param {string} outDirAbs target directory
  * @param {string[]} copyGlobs list of relative glob patterns to match files in the source directory to be copied over
  */
-export async function copyGlobbedFilesIfDifferent(inDirAbs: string, outDirAbs: string, copyGlobs: string[]) {
+export async function copyGlobbedFilesIfDifferent(inDirAbs: string, outDirAbs: string, copyGlobs: BuildGlobs) {
   const copyJobs: Promise<boolean>[] = [];
-  for (const copyGlob of copyGlobs) {
-    for await (const de of glob(copyGlob, {cwd: inDirAbs, withFileTypes: true})) {
-      // We currently ignore directories and symlinks
-      if (de.isFile()) {
-        const destPath = resolve(join(outDirAbs, relative(inDirAbs, de.parentPath), de.name));
-        const copyPromise = copyFileIfDIfferent(join(de.parentPath, de.name), destPath);
-        copyJobs.push(copyPromise);
-      }
+  for await (const de of glob(copyGlobs.include, {cwd: inDirAbs, withFileTypes: true, exclude: copyGlobs.exclude})) {
+    // We currently ignore directories and symlinks
+    if (de.isFile()) {
+      const destPath = resolve(join(outDirAbs, relative(inDirAbs, de.parentPath), de.name));
+      const copyPromise = copyFileIfDIfferent(join(de.parentPath, de.name), destPath);
+      copyJobs.push(copyPromise);
     }
   }
   await Promise.all(copyJobs);
+}
+
+export function matchesBuildGlobs(testPath: string, buildGlobs: BuildGlobs) {
+  return buildGlobs.include.some(glob => matchesGlob(testPath, glob)) && !buildGlobs.exclude.some(glob => matchesGlob(testPath, glob));
 }
 
 export type SimpleLogger = Pick<Console, 'log' | 'debug' | 'info' | 'warn' | 'error'>

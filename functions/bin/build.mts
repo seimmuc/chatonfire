@@ -20,7 +20,7 @@ await new Promise(res => {
   tscPromise.catch(error => {
     if (error.code !== 0) {
       console.error('Typescript compilation failed.');
-      console.error(error.stderr);
+      console.error(error.stdout);
     } else {
       console.error('Something went wrong');
       throw error;
