@@ -11,11 +11,12 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 
 const config = fullConfig.get('express');
+const dirname = import.meta.dirname;
 
 const app = express();
 
 // view engine setup
-app.set('views', join(__dirname, 'views'));
+app.set('views', join(dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // set reverse proxy setting
@@ -55,7 +56,7 @@ app.use(function(err, req, res, next) {
 let staticApp: Express | undefined = undefined;
 if (config.staticfiles) {
   staticApp = express();
-  staticApp.use(exprStatic(join(__dirname, 'public')));
+  staticApp.use(exprStatic(join(dirname, 'public')));
 }
 
 export {app, staticApp};

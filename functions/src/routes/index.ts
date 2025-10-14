@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express';
-import { AppState, renderHelper } from '../common';
-import { Chat } from '../types/documentSchemas';
-import { validateNewChatForm } from '../types/validation';
+import { AppState, renderHelper } from '../common.js';
+import type { Chat } from '../types/documentSchemas.js';
+import { validateNewChatForm } from '../types/validation.js';
 
 const router = Router();
 const appState = AppState.get();

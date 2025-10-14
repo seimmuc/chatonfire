@@ -1,4 +1,4 @@
-import { ACCESS_MODE } from "./documentSchemas";
+import type { ACCESS_MODE } from "./documentSchemas.js";
 
 const CHAT_VISIBILITY: Record<string, ACCESS_MODE> = {'public': 'public', 'private': 'whitelist'};
 

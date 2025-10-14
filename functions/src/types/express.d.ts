@@ -1,4 +1,4 @@
-import { type Chat } from "./documentSchemas";
+import type { Chat } from "./documentSchemas.js";
 
 declare global {
   namespace Express {
