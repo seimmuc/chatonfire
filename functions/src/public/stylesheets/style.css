@@ -45,7 +45,15 @@ nav#topbar {
   }
 }
 
-main {
+main, noscript#page-nojs {
   flex-grow: 1;
   padding: calc(1.5em + 20px) calc(2em + 30px);
+}
+
+noscript#page-nojs {
+  align-content: center;
+  align-self: center;
+  color: orange;
+  font-size: 1.4em;
+  font-weight: bold;
 }

@@ -8,8 +8,14 @@
   </head>
   <body>
     <%- include('shared/header'); %>
-    <main>
+    <main id="page-main" <%- jsRequired ? 'style="display:none;"' : '' %>>
       <%- include(contentPath, contentData) %>
     </main>
+    <% if (jsRequired) { %>
+      <noscript id="page-nojs">This page requires JavaScript to be enabled</noscript>
+      <script>
+        document.getElementById('page-main').style.display = '';
+      </script>
+    <% } %>
   </body>
 </html>
