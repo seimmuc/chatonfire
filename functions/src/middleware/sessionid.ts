@@ -15,6 +15,7 @@ const sessionId: RequestHandler = (req, _res, next) => {
     }
     s.lh = curHour;
   }
+  req.userId = s.id;
   next();
 };
 
