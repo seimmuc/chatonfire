@@ -9,7 +9,7 @@ router.param('chat_id', chatIdParamHandler);
 
 
 router.post('/chat/newchat', async (req, res, _next) => {
-  const data = validateNewChatRequest(req.body);
+  const data = await validateNewChatRequest(req.body);
   const chat = await createNewChat(req.userId, data);
   res.status(200).json({
     status: 200,
@@ -19,7 +19,7 @@ router.post('/chat/newchat', async (req, res, _next) => {
 });
 
 router.post('/chat/:chat_id/newmessage', async (req, res, _next) => {
-  const msgRequest = validateNewMessageRequest(req.body);
+  const msgRequest = await validateNewMessageRequest(req.body);
   const chat = req.chat;
   if (chat === undefined) {
     res.status(404).json({
@@ -36,7 +36,7 @@ router.post('/chat/:chat_id/newmessage', async (req, res, _next) => {
 });
 
 router.get('/chat/:chat_id/messages', async (req, res, _next) => {
-  const data = validateGetMessageRequest(req.query);
+  const data = await validateGetMessageRequest(req.query);
   const chat = req.chat;
   if (chat === undefined) {
     res.status(404).json({

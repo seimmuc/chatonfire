@@ -1,5 +1,27 @@
 import type { ACCESS_MODE } from "./documentSchemas.js";
 import { GetMessagesRequest, NewChatRequest, NewMessageRequest } from "./apiTypes.js";
+import { number, object, ObjectSchema, string, ValidateOptions } from "yup";
+
+
+// This module provides functions responsible for validating all client input using the yup library
+
+
+// yup options
+const yupValOptions: ValidateOptions = {strict: true, abortEarly: true, stripUnknown: true, recursive: true};
+
+// yup schemas
+const newChatRequestSchema: ObjectSchema<NewChatRequest> = object({
+  name: string().required().trim().min(3).max(50),
+  access: string<ACCESS_MODE>().defined()
+});
+const newMessageRequestSchema: ObjectSchema<NewMessageRequest> = object({
+  content: string().required().trim().min(1).max(1000)
+});
+const getMessagesRequestSchema: ObjectSchema<GetMessagesRequest> = object({
+  message_count: number().required().integer().positive().max(50),
+  prior_to: number().optional().integer().positive()
+});
+
 
 const CHAT_VISIBILITY: Record<string, ACCESS_MODE> = {'public': 'public', 'private': 'whitelist'};
 
@@ -12,14 +34,14 @@ export function validateNewChatForm(formData: object): NewChatRequest {
   return {name: data['chat-name'], access: CHAT_VISIBILITY[data['chat-visibility']]};
 }
 
-export function validateNewChatRequest(data: any): NewChatRequest {
-  return {name: data.name, access: data.access};
+export async function validateNewChatRequest(data: any): Promise<NewChatRequest> {
+  return await newChatRequestSchema.validate(data, yupValOptions);
 }
 
-export function validateNewMessageRequest(data: any): NewMessageRequest {
-  return {content: data.content};
+export async function validateNewMessageRequest(data: any): Promise<NewMessageRequest> {
+  return await newMessageRequestSchema.validate(data, yupValOptions);
 }
 
-export function validateGetMessageRequest(data: any): GetMessagesRequest {
-  return {message_count: parseInt(data.message_count), prior_to: data.prior_to ? parseInt(data.prior_to) : undefined};
+export async function validateGetMessageRequest(data: any): Promise<GetMessagesRequest> {
+  return await getMessagesRequestSchema.validate(data, yupValOptions);
 }

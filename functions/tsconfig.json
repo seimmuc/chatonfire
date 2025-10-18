@@ -12,6 +12,7 @@
     "strict": true,
     "noUnusedLocals": false,
     "noImplicitReturns": true,
+    "strictNullChecks": true
   },
   "compileOnSave": true,
   "exclude": ["./bin/**"]
