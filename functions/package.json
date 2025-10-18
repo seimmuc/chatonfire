@@ -2,7 +2,7 @@
   "name": "functions",
   "type": "module",
   "scripts": {
-    "lint": "eslint --ext .js,.ts .",
+    "lint": "eslint --ext .js,.mjs,.ts,.mts .",
     "build": "ts-node bin/build.mts",
     "build:watch": "ts-node bin/servewatch.mts --no-firebase",
     "serve": "ts-node bin/servewatch.mts --env dev",
