@@ -7,8 +7,9 @@ import cookieSession from 'cookie-session';
 import logger from 'morgan';
 
 import sessionid from './middleware/sessionid.js';
-import indexRouter from './routes/index.js';
+import apiRouter from './routes/api.js';
 import usersRouter from './routes/users.js';
+import indexRouter from './routes/index.js';
 
 const config = fullConfig.get('express');
 const dirname = import.meta.dirname;
@@ -34,8 +35,9 @@ app.use(cookieSession({
 }));
 app.use(sessionid());
 
-app.use('/', indexRouter);
+app.use('/api', apiRouter);
 app.use('/users', usersRouter);
+app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -64,4 +64,22 @@
       }
     }
   }
+  .cb-input {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 3px 8px;
+    gap: 10px;
+    #send-message-form {
+      display: contents;
+      #send-message-text {
+        flex-grow: 1;
+      }
+      #send-message-btn {
+        flex-grow: 0;
+      }
+    }
+  }
 }

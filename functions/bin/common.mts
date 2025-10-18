@@ -7,7 +7,7 @@ import { basename, dirname, join, matchesGlob, relative, resolve } from 'node:pa
 const ROOT_PACKAGE_NAME = 'chatonfire';
 export const BUILD_IN_DIR = './src';
 export const BUILD_OUT_DIR = './lib';
-export const BUILD_COPY_GLOBS: BuildGlobs = {include: ['views/**/*.ejs', 'public/**/*'], exclude: ['**/*.ts']};
+export const BUILD_COPY_GLOBS: BuildGlobs = {include: ['views/**/*.ejs', 'public/**/*'], exclude: ['**/*.ts', '**/*.mts']};
 
 
 export type BuildGlobs = {include: string[], exclude: string[]};
