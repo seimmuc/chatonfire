@@ -71,12 +71,17 @@ export function sleep(ms: number) {
 }
 
 type RenderOptions = {
-  headExtension?: string;
+  headExtension?: {template: string, data?: object};
   jsRequired?: boolean;
+  scripts?: {path: string, module?: boolean}[];
 }
 export function renderHelper(res: Response, viewPath: string, pageTitle: string, viewData: Record<string, any>, options?: RenderOptions) {
-  const headExtension = options?.headExtension;
-  const jsRequired = options?.jsRequired ?? false;
-  res.render('page.ejs', {contentPath: viewPath, title: pageTitle, contentData: viewData, headExtension, jsRequired});
+  res.render('page.ejs', {
+    contentPath: viewPath,
+    contentData: viewData,
+    title: pageTitle,
+    scripts: options?.scripts,
+    headExtension: options?.headExtension,
+    jsRequired: options?.jsRequired ?? false
+  });
 }
-

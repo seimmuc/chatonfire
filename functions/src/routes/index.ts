@@ -16,7 +16,7 @@ router.get('/', async function(req, res, _next) {
 
 router.route('/chat/new')
   .get((req, res, _next) => {
-    renderHelper(res, 'room/new', 'Create new chat', {}, {headExtension: 'room/head_chat'});
+    renderHelper(res, 'room/new', 'Create new chat', {}, {headExtension: {template: 'room/head_chat'}});
   })
   .post(async (req, res, _next) => {
     const userId = req.session?.id;
@@ -33,10 +33,11 @@ router.route('/chat/:chat_id')
   .get(async (req, res, _next) => {
     const chat = req.chat;
     if (chat === undefined) {
-      renderHelper(res, 'room/404', 'Chat not found', {}, {headExtension: 'room/head_chat'});
+      renderHelper(res, 'room/404', 'Chat not found', {}, {headExtension: {template: 'room/head_chat'}});
     } else {
       const messages = await getRecentMessages(chat.id, {message_count: 50});
-      renderHelper(res, 'room/chat', `Chat ${chat.name}`, {chat, messages}, {headExtension: 'room/head_chat', jsRequired: true});
+      renderHelper(res, 'room/chat', `Chat ${chat.name}`, {chat, messages}, {headExtension: {template: 'room/head_chat'},
+          jsRequired: true, scripts: [{path: '/js/chatview.mjs', module: true}]});
     }
   });
 

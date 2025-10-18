@@ -2,8 +2,13 @@
 <html>
   <head>
     <%- include('shared/head_base', {title}); %>
+    <% if (scripts !== undefined) { %>
+      <% for(const script of scripts) { %>
+        <script <%- script.module ? 'type="module"' : 'defer' %> src="<%- script.path %>"></script>
+      <% } %>
+    <% } %>
     <% if (headExtension !== undefined) { %>
-     <%- include(headExtension) %>
+     <%- include(headExtension.template, headExtension.data) %>
     <% } %>
   </head>
   <body>
@@ -14,7 +19,7 @@
     <% if (jsRequired) { %>
       <noscript id="page-nojs">This page requires JavaScript to be enabled</noscript>
       <script>
-        document.getElementById('page-main').style.display = '';
+        document.getElementById('page-main').removeAttribute('style');
       </script>
     <% } %>
   </body>
