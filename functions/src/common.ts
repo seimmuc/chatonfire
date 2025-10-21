@@ -60,7 +60,8 @@ function snowflakeIdToBase64(snowflakeId: string): string {
   }
   const buf = Buffer.alloc(8);
   buf.writeBigInt64BE(num, 0);
-  return buf.toString('base64').replace(/={1,2}$/, '');
+  // no slashes because they mess up url paths and don't work in firebase and remove padding because extra equal signs in the url are annoying
+  return buf.toString('base64').replace('/', '|').replace(/={1,2}$/, '');
 }
 
 
