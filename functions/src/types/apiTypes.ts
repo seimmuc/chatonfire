@@ -1,5 +1,10 @@
-import { ACCESS_MODE, Message } from "./documentSchemas.js";
+import type { ACCESS_MODE, Message } from "./documentSchemas.js";
 
+// re-export for client-side js
+export { ACCESS_MODE };
+
+
+// abstract types
 interface ApiResponse {
   /** HTTP status code */
   status: number;

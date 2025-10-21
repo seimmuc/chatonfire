@@ -15,19 +15,9 @@ router.get('/', async function(req, res, _next) {
 } satisfies RequestHandler);
 
 router.route('/chat/new')
-  .get((req, res, _next) => {
-    renderHelper(res, 'room/new', 'Create new chat', {}, {headExtension: {template: 'room/head_chat'}});
-  })
-  .post(async (req, res, _next) => {
-    const userId = req.session?.id;
-    if (typeof userId !== 'string') {
-      throw TypeError
-    }
-    const formData = req.body;
-    console.log(formData);
-    const requestData = validateNewChatForm(formData);
-    const chat = await createNewChat(userId, requestData);
-    res.redirect(`/chat/${chat.id}`);
+  .get((_req, res, _next) => {
+    renderHelper(res, 'room/new', 'Create new chat', {}, {headExtension: {template: 'room/head_chat'},
+        jsRequired: true, scripts: [{path: '/js/chatnew.mjs', module: true}]});
   });
 router.route('/chat/:chat_id')
   .get(async (req, res, _next) => {

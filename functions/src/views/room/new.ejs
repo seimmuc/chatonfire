@@ -1,8 +1,8 @@
 <div class="content-box newchat">
-  <form method ="post" enctype="application/x-www-form-urlencoded">
+  <form id="new-chat-form" action="javascript:void(0)">
     <label>
       Chat name
-      <input name="chat-name" type="text" maxlength="30">
+      <input name="chat-name" type="text" required minlength="3" maxlength="50">
     </label>
     <label>
       Visibility
@@ -11,6 +11,7 @@
         <option value="private">Private</option>
       </select>
     </label>
-    <button type="submit">Create</button>
+    <button id="new-chat-create-btn" type="submit">Create</button>
   </form>
+  <div id="new-chat-error-msg" class="shrink hidden"></div>
 </div>
