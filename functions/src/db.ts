@@ -22,7 +22,7 @@ export async function getChatById(chatId: string): Promise<Chat | undefined> {
 }
 
 export async function createNewChat(adminId: string, ncReq: NewChatRequest): Promise<Chat> {
-  const chat: Chat = {id: await appState.generateRoomId(), name: ncReq.name, access: ncReq.access, admin_id: adminId, whitelist: []};
+  const chat: Chat = {id: appState.generateRoomId(), name: ncReq.name, access: ncReq.access, admin_id: adminId, whitelist: []};
   await appState.db.collection('rooms').doc(chat.id).set(chat);
   return chat;
 }
@@ -41,7 +41,7 @@ export async function getRecentMessages(chatId: string, gmReq: GetMessagesReques
 }
 
 export async function createNewMessage(chatId: string, author: string, nmReq: NewMessageRequest): Promise<Message> {
-  const message: NewMessage = {id: await appState.generateMessageId(), author, content: nmReq.content};
+  const message: NewMessage = {id: appState.generateMessageId(), author, content: nmReq.content};
   const res = await appState.db.collection('rooms').doc(chatId).collection('messages').doc(message.id).set({...message, timestamp: FieldValue.serverTimestamp()});
   return {...message, timestamp: res.writeTime.toMillis()};
 }
