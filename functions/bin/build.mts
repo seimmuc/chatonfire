@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node
 
 // A build script that triggers tsc and then copies static files that have been modified. Would just use `rsync --update` if Windows shipped with it.
 
