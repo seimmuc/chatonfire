@@ -16,8 +16,7 @@ router.get('/', async function(req, res, _next) {
 
 router.route('/chat/new')
   .get((_req, res, _next) => {
-    renderHelper(res, 'room/new', 'Create new chat', {}, {headExtension: {template: 'room/head_chat'},
-        jsRequired: true, scripts: [{path: '/js/chatnew.mjs', module: true}]});
+    renderHelper(res, 'room/new', 'Create new chat', {}, {jsRequired: true, scripts: [{path: '/js/chatnew.mjs', module: true}]});
   });
 router.route('/chat/:chat_id')
   .get(async (req, res, _next) => {
