@@ -1,5 +1,5 @@
 import type { ACCESS_MODE } from "./documentSchemas.js";
-import { GetMessagesRequest, NewChatRequest, NewMessageRequest } from "./apiTypes.js";
+import { GetMessagesRequest, NewChatRequest, NewMessageRequest, UpdateSettingsRequest } from "./apiTypes.js";
 import { number, object, ObjectSchema, string, ValidateOptions } from "yup";
 
 
@@ -10,6 +10,11 @@ import { number, object, ObjectSchema, string, ValidateOptions } from "yup";
 const yupValOptions: ValidateOptions = {strict: true, abortEarly: true, stripUnknown: true, recursive: true};
 
 // yup schemas
+const updateUserSettingsSchema: ObjectSchema<UpdateSettingsRequest> = object({
+  settings: object({
+    username: string().required().trim().min(2).max(30)
+  })
+});
 const newChatRequestSchema: ObjectSchema<NewChatRequest> = object({
   name: string().required().trim().min(3).max(50),
   access: string<ACCESS_MODE>().defined()
@@ -32,6 +37,10 @@ export function validateNewChatForm(formData: object): NewChatRequest {
   // TODO validate data using yup
   const data = formData as {'chat-name': string, 'chat-visibility': 'public' | 'private'};
   return {name: data['chat-name'], access: CHAT_VISIBILITY[data['chat-visibility']]};
+}
+
+export async function validateSettingsUpdateRequest(data: any): Promise<UpdateSettingsRequest> {
+  return await updateUserSettingsSchema.validate(data, yupValOptions);
 }
 
 export async function validateNewChatRequest(data: any): Promise<NewChatRequest> {

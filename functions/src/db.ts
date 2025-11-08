@@ -1,5 +1,5 @@
 import { RequestParamHandler } from "express";
-import type { Chat, DBMessage, Message, NewMessage } from "./types/documentSchemas.js";
+import type { Chat, DBMessage, Message, NewMessage, UserSettings } from "./types/documentSchemas.js";
 import { AppState } from "./common.js";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { GetMessagesRequest, NewChatRequest, NewMessageRequest } from "./types/apiTypes.js";
@@ -11,6 +11,19 @@ function messageFromDb(message: DBMessage): Message {
   return {...message, timestamp: message.timestamp.toMillis()};
 }
 
+
+export async function getSettings(userId: string): Promise<UserSettings | undefined> {
+  const settingsSnap = await appState.db.collection('settings').doc(userId).get();
+  if (settingsSnap.exists) {
+    return settingsSnap.data() as UserSettings;
+  } else {
+    return undefined;
+  }
+}
+
+export async function updateSettings(userId: string, settings: Partial<UserSettings>): Promise<void> {
+  const res = await appState.db.collection('settings').doc(userId).set(settings as Record<string, any>, {merge: true});
+}
 
 export async function getChatById(chatId: string): Promise<Chat | undefined> {
   const docSnap = await appState.db.collection('rooms').doc(chatId).get();

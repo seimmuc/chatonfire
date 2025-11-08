@@ -1,5 +1,9 @@
 import { Timestamp } from "firebase-admin/firestore";
 
+export interface UserSettings {
+  username: string;
+}
+
 export type ACCESS_MODE = 'public' | 'whitelist';
 
 export interface Chat {

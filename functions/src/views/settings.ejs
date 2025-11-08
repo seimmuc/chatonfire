@@ -1,0 +1,10 @@
+<div class="content-box form-section">
+  <form id="settings-form" action="javascript:void(0)">
+    <label>
+      Username
+      <input name="username" type="text" value="<%= settings.username %>" required minlength="2" maxlength="30">
+    </label>
+    <button id="settings-save-btn" type="submit">Save</button>
+  </form>
+  <div id="settings-error-msg" class="error-msg shrink hidden"></div>
+</div>

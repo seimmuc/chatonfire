@@ -1,11 +1,36 @@
 import { Router } from "express";
-import { chatIdParamHandler, createNewChat, getRecentMessages, createNewMessage } from "../db.js";
-import { validateGetMessageRequest, validateNewChatRequest, validateNewMessageRequest } from "../types/validation.js";
-import { GetMessagesError, GetMessagesResponse, NewChatResponse, NewMessageError, NewMessageResponse } from "../types/apiTypes.js";
+import { chatIdParamHandler, createNewChat, getRecentMessages, createNewMessage, updateSettings, getSettings } from "../db.js";
+import { validateGetMessageRequest, validateNewChatRequest, validateNewMessageRequest, validateSettingsUpdateRequest } from "../types/validation.js";
+import { GetMessagesError, GetMessagesResponse, GetSettingsError, GetSettingsResponse, NewChatResponse, NewMessageError, NewMessageResponse, UpdateSettingsResponse } from "../types/apiTypes.js";
 
 const router = Router();
 
 router.param('chat_id', chatIdParamHandler);
+
+
+router.route('/settings')
+  .get(async (req, res, _next) => {
+    const settings = await getSettings(req.userId);
+    if (settings === undefined) {
+      res.status(404).json({
+        status: 404,
+        error: 'no_settings_set',
+        error_message: 'missing user settings'
+      } satisfies GetSettingsError);
+    } else {
+      res.status(200).json({
+        status: 200,
+        settings
+      } satisfies GetSettingsResponse);
+    }
+  })
+  .post(async (req, res, _next) => {
+    const data = await validateSettingsUpdateRequest(req.body);
+    await updateSettings(req.userId, data.settings);
+    res.status(200).json({
+      status: 200
+    } satisfies UpdateSettingsResponse);
+  });
 
 
 router.post('/chat/newchat', async (req, res, _next) => {

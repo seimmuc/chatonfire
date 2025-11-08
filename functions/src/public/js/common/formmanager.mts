@@ -23,7 +23,7 @@ export class ErrorMessageComponent {
         if (errElem.classList.contains('hidden')) {
           // We have to change display value BEFORE others for the animation to work
           errElem.classList.remove('hidden');
-          this.timeouts.push(setTimeout(gs, 0))
+          this.timeouts.push(setTimeout(gs, 1));
         } else {
           gs();
         }

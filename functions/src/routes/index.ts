@@ -1,7 +1,8 @@
 import { RequestHandler, Router } from 'express';
 import { AppState, renderHelper } from '../common.js';
 import { validateNewChatForm } from '../types/validation.js';
-import { chatIdParamHandler, createNewChat, getRecentMessages } from '../db.js';
+import { chatIdParamHandler, createNewChat, getRecentMessages, getSettings } from '../db.js';
+import type { UserSettings } from '../types/documentSchemas.js';
 
 const router = Router();
 const appState = AppState.get();
@@ -29,5 +30,10 @@ router.route('/chat/:chat_id')
           jsRequired: true, scripts: [{path: '/js/chatview.mjs', module: true}]});
     }
   });
+
+router.get('/settings', async (req, res, _next) => {
+  const settings: UserSettings = (await getSettings(req.userId)) ?? {username: ''};
+  renderHelper(res, 'settings', 'Settings', {settings}, {jsRequired: true, scripts: [{path: '/js/settings.mjs', module: true}]});
+});
 
 export default router;

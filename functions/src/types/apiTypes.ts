@@ -1,7 +1,7 @@
-import type { ACCESS_MODE, Message } from "./documentSchemas.js";
+import type { ACCESS_MODE, Message, UserSettings } from "./documentSchemas.js";
 
 // re-export for client-side js
-export { ACCESS_MODE };
+export { ACCESS_MODE, UserSettings };
 
 
 // abstract types
@@ -15,6 +15,18 @@ interface ErrorResponse extends ApiResponse {
   /** Human-readable error description */
   error_message: string;
 }
+
+// Settings
+export interface GetSettingsResponse extends ApiResponse {
+  settings: UserSettings;
+}
+export interface GetSettingsError extends ErrorResponse {}
+
+export interface UpdateSettingsRequest {
+  settings: UserSettings;
+}
+export interface UpdateSettingsResponse extends ApiResponse {}
+export interface UpdateSettingsError extends ErrorResponse {}
 
 // New chat request
 export interface NewChatRequest {
