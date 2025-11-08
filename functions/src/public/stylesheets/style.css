@@ -23,10 +23,27 @@ nav#topbar {
   left: 0;
   right: 0;
 
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
 
   background-color: hsl(255, 10%, 15%);
-  padding: 10px 30px;
+  padding: 10px 40px;
   font-size: 1.3em;
+
+  ul.navbar {
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.25em;
+    list-style-type: none;
+    padding: 0;
+  }
 
   a.nav-button {
     font-size: inherit;
