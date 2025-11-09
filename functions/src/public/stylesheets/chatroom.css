@@ -33,6 +33,33 @@
         line-height: 1.7;
       }
     }
+    &.messages {
+      .message {
+        margin: 0.25em 0;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: start;
+        .timestamp {
+          color: hsl(75, 7%, 45%);
+          white-space: nowrap;
+        }
+        .author {
+          margin-left: 0.65em;
+          color: hsl(75, 75%, 55%);
+          white-space: nowrap;
+          transition: opacity 0.2s;
+          opacity: 1;
+          &.empty {
+            opacity: 0;
+          }
+        }
+        .content {
+          color: hsl(75, 30%, 90%);
+          margin-left: 0.75em;
+        }
+      }
+    }
   }
   .cb-input {
     display: flex;

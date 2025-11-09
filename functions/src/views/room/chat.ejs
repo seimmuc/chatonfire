@@ -2,11 +2,7 @@
   <div class="cb-head">
     <h1 class="chat-header"><%= chat.name %></h1>
   </div>
-  <div class="cb-main messages">
-    <% for(const message of messages) { %>
-      <div><%= message.content %></div>
-    <% } %>
-  </div>
+  <div class="cb-main messages"></div>
   <div class="cb-input">
     <form id="send-message-form" action="javascript:void(0)">
       <input id="send-message-text" type="text" name="message" autocomplete="off" placeholder="JS must be enabled to chat" disabled>

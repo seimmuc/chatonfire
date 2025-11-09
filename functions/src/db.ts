@@ -1,7 +1,7 @@
 import { RequestParamHandler } from "express";
 import type { Chat, DBMessage, Message, NewMessage, UserSettings } from "./types/documentSchemas.js";
-import { AppState } from "./common.js";
-import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { AppState, batchItems } from "./common.js";
+import { FieldPath, FieldValue, Timestamp } from "firebase-admin/firestore";
 import { GetMessagesRequest, NewChatRequest, NewMessageRequest } from "./types/apiTypes.js";
 
 const appState = AppState.get();
@@ -23,6 +23,19 @@ export async function getSettings(userId: string): Promise<UserSettings | undefi
 
 export async function updateSettings(userId: string, settings: Partial<UserSettings>): Promise<void> {
   const res = await appState.db.collection('settings').doc(userId).set(settings as Record<string, any>, {merge: true});
+}
+
+export async function getUsernames(userIds: Iterable<string>): Promise<Record<string, string>> {
+  const uidSet = new Set(userIds);
+  const batches = batchItems(uidSet, 10);
+  const usernames: Record<string, string> = {};
+  const settingsRef = appState.db.collection('settings');
+  for (const batch of batches) {
+    for (const doc of (await settingsRef.where(FieldPath.documentId(), 'in', batch).get()).docs) {
+      usernames[doc.id] = doc.get('username') as string;
+    }
+  }
+  return usernames;
 }
 
 export async function getChatById(chatId: string): Promise<Chat | undefined> {

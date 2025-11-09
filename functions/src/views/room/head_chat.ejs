@@ -1,1 +1,6 @@
 <link rel='stylesheet' href='/stylesheets/chatroom.css' />
+<% if (typeof chatData !== 'undefined') { %>
+  <script>
+    const initChatDataJson = '<%- JSON.stringify(chatData) %>';
+  </script>
+<% } %>

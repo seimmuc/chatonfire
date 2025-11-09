@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express';
 import { AppState, renderHelper } from '../common.js';
 import { validateNewChatForm } from '../types/validation.js';
-import { chatIdParamHandler, createNewChat, getRecentMessages, getSettings } from '../db.js';
+import { chatIdParamHandler, createNewChat, getRecentMessages, getSettings, getUsernames } from '../db.js';
 import type { UserSettings } from '../types/documentSchemas.js';
 
 const router = Router();
@@ -26,7 +26,9 @@ router.route('/chat/:chat_id')
       renderHelper(res, 'room/404', 'Chat not found', {}, {headExtension: {template: 'room/head_chat'}});
     } else {
       const messages = await getRecentMessages(chat.id, {message_count: 50});
-      renderHelper(res, 'room/chat', `Chat ${chat.name}`, {chat, messages}, {headExtension: {template: 'room/head_chat'},
+      const usernames = await getUsernames(messages.map(m => m.author));
+      const chatData = {messages, usernames};
+      renderHelper(res, 'room/chat', `Chat ${chat.name}`, {chat, messages}, {headExtension: {template: 'room/head_chat', data: {chatData}},
           jsRequired: true, scripts: [{path: '/js/chatview.mjs', module: true}]});
     }
   });

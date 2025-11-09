@@ -1,7 +1,7 @@
 import type { ACCESS_MODE, Message, UserSettings } from "./documentSchemas.js";
 
 // re-export for client-side js
-export { ACCESS_MODE, UserSettings };
+export { ACCESS_MODE, Message, UserSettings };
 
 
 // abstract types

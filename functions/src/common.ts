@@ -110,6 +110,22 @@ export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+export function batchItems<T>(items: Iterable<T>, batchSize: number): T[][] {
+  if (batchSize < 1) {
+    throw new RangeError(`batchSize must be >= 1, got ${batchSize}`);
+  }
+  const iter = items[Symbol.iterator]();
+  batchSize = Math.floor(batchSize);
+  const result: T[][] = [];
+  for (let i = 0, bi = 0, it = iter.next(); !it.done; bi = Math.floor(++i / batchSize), it = iter.next()) {
+    if (result.length === bi) {
+      result.push([]);
+    }
+    result[bi].push(it.value);
+  }
+  return result;
+}
+
 type RenderOptions = {
   headExtension?: {template: string, data?: object};
   jsRequired?: boolean;
